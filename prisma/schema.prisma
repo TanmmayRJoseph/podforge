@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  name      String?
+  createdAt DateTime  @default(now())
+  comments  Comment[]
+  likes     Like[]
+  podcasts  Podcast[]
+}
+
+model Podcast {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  audioUrl    String
+  imageUrl    String?
+  tags        String[]
+  uploadedBy  String
+  createdAt   DateTime  @default(now())
+  comments    Comment[]
+  likes       Like[]
+  uploader    User      @relation(fields: [uploadedBy], references: [id])
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  podcastId String
+  userId    String
+  createdAt DateTime @default(now())
+  podcast   Podcast  @relation(fields: [podcastId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([podcastId, userId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  podcastId String
+  userId    String
+  text      String
+  createdAt DateTime @default(now())
+  podcast   Podcast  @relation(fields: [podcastId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
