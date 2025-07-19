@@ -58,7 +58,7 @@
 
 1. **Clone the repository**
    ```bash
-   git clone [<repository-url>](https://github.com/TanmmayRJoseph/podforge)
+   git clone https://github.com/TanmmayRJoseph/podforge
    cd podforge
    ```
 
